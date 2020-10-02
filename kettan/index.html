@@ -133,4 +133,17 @@
 </div>
 
 
+<script>
+boxes = document.getElementsByClassName('gradientblock');
+
+
+for (let counter = 1; counter < boxes.length+1; counter++) {
+    const element = boxes[counter-1];
+    html_to_insert = '<span class="counter">' + counter + '</span>';
+    element.insertAdjacentHTML('beforeend', html_to_insert);
+    console.log(counter);
+}
+
+</script>
+
 <span class="px-viewport-dimensions tr px-viewport-dimensions--hidden"></span></body></html>

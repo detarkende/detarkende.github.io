@@ -20,3 +20,10 @@
     min-height: 200px;
     align-content: center;
 }
+
+@media only screen and (max-width: 500px) {
+    .gradientblock{
+        width: 80vw;
+        height: 30vh;
+    }
+  }

@@ -62,6 +62,12 @@
         groundMesh.castShadow = false;
         groundMesh.rotation.x = -1.0 * THREE.MathUtils.degToRad( 90 );
 
+        var kocka = new THREE.BoxGeometry(2, 2, 2);
+        var kockamesh = new THREE.Mesh(kocka, material);
+        kockamesh.position.set(0, 14, 0);
+        kockamesh.receiveShadow = false;
+        kockamesh.castShadow = true;
+        
         
 
 
@@ -88,7 +94,7 @@
         var mesh5 = new THREE.Mesh( asztallap, material );
         mesh5.position.set( 0, 0, 5 );
         mesh5.castShadow = true;
-        mesh5.receiveShadow = false;
+        mesh5.receiveShadow = true;
         group.add(mesh5);
 
         group.rotation.set(-90 * Math.PI / 180 , 0, 0);
@@ -100,6 +106,7 @@
         scene.add(helper);
         scene.add( groundMesh );
         scene.add(group);
+        scene.add(kockamesh);
         
         //Fények beállítása
         var light = new THREE.AmbientLight(0xffffff, 0.4);

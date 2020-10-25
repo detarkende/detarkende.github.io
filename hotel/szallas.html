@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>SmartHotel.com</title>
+    <meta name="description" content="Az elérhető árú hotelek és szállások helye. Foglalj most!">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/simple-line-icons.min.css">   
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand bg-light navigation-clean">
+        <div class="container"><a href="index.html" class="navbar-brand" href="#">SmartHotel.com</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"></button>
+            <div class="collapse navbar-collapse" id="navcol-1"><a class="btn btn-primary ml-auto" role="button" href="./bejelentkezes">Bejelentkezés</a></div>
+        </div>
+    </nav>
+    <div class="text-center" style="background-color: white; background-size: cover;">
+        <div class="container">
+            <div class="row m-5">
+                    <div class="col-md-5">
+                        <img src="./assets/img/36273774.webp" alt="" class="img-fluid">
+                    </div>
+                    <div class="col-md-4">
+                        <p class="h2">Laroba Wellness Hotel Alsóörs</p>
+                        <p>8226 Alsóörs, Füredi utca 42</p>
+                        
+                        <form action="#" method="post">
+                            <div class="form-group text-left">
+                              <label for="date-arrive">Mikor szeretne érkezni?</label>
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                <div class="input-group-addon"><i class="icon-calendar"></i></div>
+                                <input type="date" required class="form-control" onchange="displayLength(this);" value="" name="date-arrive" id="date-arrive">
+                                </div>
+
+                              <label for="date-daparture">Mikor szeretne távozni?</label>
+                              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                <div class="input-group-addon"><i class="icon-calendar"></i></div>
+                              <input type="date" required class="form-control" onchange="displayLength(this);" value="" name="date-departure" id="date-departure">
+                              </div>
+
+                              <label for="inputGroupSelect02">Hány fő számára keres szállást?</label>
+                              <div class="input-group col-5 p-0 col-sm-7">
+                                <select required class="custom-select" id="inputGroupSelect02">
+                                    <option value=""></option>
+                                </select>
+                                <div class="input-group-append">
+                                  <label class="input-group-text" for="inputGroupSelect02">fő</label>
+                                </div>
+                              </div>
+                            </div>
+
+                            <p id="napok_szama"></p>
+
+                            <input type="submit" class="btn btn-primary btn-lg" value="Lefoglalom">
+                        </form>
+
+                    </div>
+                    <div class="col-md-3 d-flex flex-column">
+                        <span id="ratingNumber">8.4 <!--IDE JON AZ ERTEKELT PONTSZAM--></span>
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle" id="ratingscircle"
+                              stroke-dasharray="10, 100"
+                              d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                            />
+                          </svg>
+                    </div>
+
+                
+            </div>
+            <div class="row">
+                <div class="col-xl-9 mx-auto">
+                    <!--VELEMENYEK ES IRAS-->
+
+                    <form action="">
+                    <!--TODO: a velemenyiras formjat elkesziteni-->
+                    <div class="velemenyiras text-left form-group">
+                        <span class="velemenyiro_neve">Felhasználó Neve</span>
+                        
+                            <textarea name="review" id="review" class="form-control"></textarea>
+                            <label class="d-inline" for="review-number">Értékelés:   </label> <span id="currentNumber">10</span> <input type="range" min="1" max="10" class="custom-range d-inline w-25 mw-100" name="review-number" id="review-number"  oninput="document.getElementById('currentNumber').innerHTML = this.value;">
+                        </form>
+                    </div>
+
+                    <div class="d-flex flex-column col-md-12" id="osszes_velemeny">
+                        <div class="col-md-12 text-left velemeny">
+                            <span class="velemenyiro_neve">Kovács János</span> <span class="velemenyiro_ertekelese">9</span>
+                            <p class="velemeny-szovege">Rendkívül kellemesek a szobák, a hotel pedig tiszta. Csak ajánlani tudom.</p>
+                            <time>2019-11-20</time>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer class="footer bg-light" style="background-color: rgb(149,149,149);">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 my-auto h-100 text-center text-lg-left">
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item"></li>
+                        <li class="list-inline-item"></li>
+                        <li class="list-inline-item"></li>
+                        <li class="list-inline-item"><a href="#">Terms of &nbsp;Use</a></li>
+                        <li class="list-inline-item"><span>⋅</span></li>
+                        <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+                    </ul>
+                    <p class="text-muted small mb-4 mb-lg-0">© SmartHotel.com 2020. All Rights Reserved.</p>
+                </div>
+                <div class="col-lg-6 my-auto h-100 text-center text-lg-right">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-facebook fa-2x fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-twitter fa-2x fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-instagram fa-2x fa-fw"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
+
+    <script>
+
+        window.onload = () => {
+            document.getElementById('date-arrive').min = new Date().toISOString().split("T")[0];
+            const today = new Date()
+            const tomorrow = new Date(today)
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            document.getElementById('date-departure').min = tomorrow.toISOString().split("T")[0];
+            document.getElementById('date-arrive').value = "";
+            document.getElementById('date-departure').value = "";
+
+            for (let index = 1; index < 16; index++) {
+                var option = document.createElement("option");
+                option.text = index;
+                option.value = index;
+                document.getElementById('inputGroupSelect02').appendChild(option);
+            }
+
+            var ertekeles = document.getElementById("ratingNumber").innerHTML;
+            console.log(parseFloat(ertekeles));
+            setRatings(parseFloat(ertekeles));
+
+            var circle = $('.circle');
+            if (parseFloat(ertekeles) <  5.0){
+                circle.css("stroke", "#dc3545");
+            }
+            else if (parseFloat(ertekeles) <  8.0){
+                circle.css("stroke", "#ffc107");
+            }
+            else {
+                circle.css("stroke", "#28a745");
+            }
+            
+        }
+
+        // segedfuggveny, beallitja az ertekelesek karikajat a parameter ertekere
+        function setRatings(param){
+            param *= 10;
+            var string = param + ", 100";
+            document.getElementById('ratingscircle').setAttribute("stroke-dasharray", string);
+        }
+
+
+        // segedfuggveny. kiszamolja a string utani kovetkezo napot
+        function tomorrow(string){
+            var tmp = new Date(string);
+            tmp.setDate(tmp.getDate() + 1);
+            return tmp.toISOString().split("T")[0];
+        }
+        
+        // Hallgatja a ket datum valtozasat
+        function displayLength(caller){
+            var arrive = document.getElementById('date-arrive').value;
+            var depart = document.getElementById('date-departure').value;
+
+            arrive = new Date(arrive);
+            depart = new Date(depart);
+
+            var arr = document.getElementById('date-arrive');
+            var dep = document.getElementById('date-departure');
+
+            if (caller.id == "date-arrive"){
+                if (dep.value == ""){
+                    dep.min = tomorrow(arr.value);
+                }
+                else if (depart <= arrive) {
+                    dep.value = tomorrow(arr.value);
+                    dep.min = tomorrow(arr.value);
+                }
+                else if (tomorrow(arr.value) < dep.value) {
+                    dep.min = tomorrow(arr.value);
+                }
+                dep.focus();
+            }
+
+            //segedfuggveny. datumok kozti kulonbseget adja vissza napokban
+            const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+            function dateDiffInDays(a, b) {
+                const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+                const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+                return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+            }
+
+            //kiirja hogy hany nap es hany ej
+            if (arr.value != "" && dep.value != ""){
+                document.getElementById("napok_szama").innerText = dateDiffInDays(arrive, depart)+1 + " nap / " + dateDiffInDays(arrive, depart) + " éjszaka";
+            }
+
+        
+        }
+    </script>
+</body>
+
+</html>

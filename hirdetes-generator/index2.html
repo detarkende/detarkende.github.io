@@ -1,0 +1,227 @@
+<html lang="hu"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <title>HSA | Hirdetés Generátor</title>
+
+    
+    <script>
+        if (navigator.userAgent.match(/Android/i) ||
+            navigator.userAgent.match(/webOS/i) ||
+            navigator.userAgent.match(/iPhone/i) ||
+            navigator.userAgent.match(/iPad/i) ||
+            navigator.userAgent.match(/iPod/i) ||
+            navigator.userAgent.match(/BlackBerry/i) ||
+            navigator.userAgent.match(/Windows Phone/i)) {
+    
+            alert("Az oldal jelenleg csak számítógépről használható. Mobilról NEM!");
+            window.stop();
+        }
+    </script></head>
+    
+    
+    
+    <body>
+    
+        <div id="login_overlay" style="display: none;">
+            <div id="login">
+                <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/logo.png" width="84">
+                <div id="div01">
+                    <label for="password">Password</label>
+                    <input type="password" class="password" id="password" required=""><br>
+                    <button onclick="verify()" id="verify">Bejelentkezés</button>
+                    <p id="msg" style="color: red; padding: 0px; text-decoration: none;"></p>
+                </div>
+            </div>
+        </div>
+    
+    
+    
+        <script>
+            function verify() {
+                var jelszo = document.getElementById('password').value;
+                document.getElementById('msg').innerHTML = '';
+                if (jelszo != '') {
+                    if (jelszo == 'hsa2020') {
+                        document.getElementById('login_overlay').style.display = "none";
+                    } else {
+                        document.getElementById('msg').innerHTML = 'Helytelen jelszó!';
+                    }
+                } else {
+                    document.getElementById('msg').innerHTML = 'Írja be a jelszót!';
+                }
+            }
+        </script>
+    
+        <nav>
+            <ul>
+                <li id="hsalogo">
+                    <a href="http://127.0.0.1:5500/www.hsa.hu"> <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/HSA_logo-e1596540553919.png"></a>
+                </li>
+                <li><a href="https://www.hsa.outclass.hu/">Megrendelő</a></li>
+                <li><a href="#" id="active">Hirdetés generátor</a></li>
+                <li><a href="https://www.hsa.outclass.hu/alairas">Aláírás generátor</a></li>
+            </ul>
+        </nav>
+    
+        <!--EDIT THE IMAGE TEXT-->
+        <script>
+            function displayImg(source) {
+                document.getElementById('display').style.display = 'inline';
+                document.getElementById('display').src = source;
+            }
+    
+            function displayText() {
+                var munkaValue = document.getElementById("munka");
+                var str = munkaValue.value;
+    
+                var displayText = document.getElementById("displayText");
+                displayText.innerText = str;
+            }
+    
+            function displayPlace() {
+                var munkaValue = document.getElementById("hely");
+                var str = munkaValue.value;
+    
+                var displayText = document.getElementById("displayPlace");
+                displayText.innerText = str;
+            }
+        </script>
+    
+    
+        <div class="grid">
+            <div class="displayContainer" width="750" height="392.5">
+                <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/darken.html" id="display">
+                <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/overlay.png" id="displayLogoTOP">
+                <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/pin.png" id="pin">
+                <h1 id="displayText">Főcímc</h1>
+                <h1 id="displayPlace">Alcímc</h1>
+            </div>
+    
+    
+            <div class="parent">
+                <div id="div1"> <input type="text" maxlength="26" class="password" id="munka" placeholder="Főcím" oninput="displayText()"></div>
+                <div id="div2"><input type="text" maxlength="30" class="password" id="hely" placeholder="Alcím" oninput="displayPlace()"></div> <br>
+    
+                <button class="gomb" id="div3" onclick="alsz()">Alszöveg</button><br>
+                <button class="gomb" id="div4" onclick="mvh()">Munkavégzés helye</button> <br>
+                <div id="div5">
+                    <button id="generate" onclick="generateImg()">
+                    Kép letöltése!
+                    </button></div>
+            </div>
+    
+    
+    
+            <!--GENERATE BUTTON-->
+    
+        </div>
+        <!--<div class="categories">
+            <button class="gomb" id=""></button>
+        </div>-->
+        
+        <div id="imageSlider">
+            <div id="images">
+                <div>
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img1.jpg" onclick="displayImg(this.src)">
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img2.jpg" onclick="displayImg(this.src)">
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img3.jpg" onclick="displayImg(this.src)">
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img4.jpg" onclick="displayImg(this.src)">
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img5.jpg" onclick="displayImg(this.src)">
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img6.jpg" onclick="displayImg(this.src)">
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img1.jpg" onclick="displayImg(this.src)">
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img2.jpg" onclick="displayImg(this.src)">
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img3.jpg" onclick="displayImg(this.src)">
+                    <img src="HSA%20Hirdet%C3%A9s%20Gener%C3%A1tor_files/img4.jpg" onclick="displayImg(this.src)">
+                </div>
+            </div>
+        </div>
+        <p><a target="_blank" href="https://hsa.outclass.hu/">Nem találtál megfelelő képet vagy elakadtál? Írj nekünk!</a></p>
+    
+    
+    
+    
+        <canvas id="canvas" width="1500" height="785"></canvas>
+    
+        <!--MUNKAVEGZES HELYE VAGY ALSZOVEG-->
+    
+        <script>
+            function alsz() {
+                document.getElementById('displayPlace').style.left = "20%";
+                document.getElementById('pin').style.display = 'none';
+                document.getElementById('hely').placeholder = 'Alszöveg';
+            }
+    
+            function mvh() {
+                document.getElementById('displayPlace').style.left = "23.3%";
+                document.getElementById('pin').style.display = 'inline';
+                document.getElementById('hely').placeholder = 'Munkavégzés helye';
+            }
+    
+            // canvas es kep generalasa
+            function generateImg() {
+                var canvas = document.getElementById('canvas');
+                canvas.width = 1500;
+                canvas.height = 785;
+                ctx = canvas.getContext('2d');
+                var image = document.getElementById('display');
+                var overlay = document.getElementById('displayLogoTOP');
+                ctx.drawImage(image, 0, 0);
+                ctx.drawImage(overlay, 0, 0);
+                var munka = document.getElementById('displayText').innerText;
+                ctx.font = '500 67px Ubuntu';
+                ctx.fillStyle = "white";
+                ctx.fillText(munka, 300, 147.5);
+                //PIN Szerepel-e vagy sem
+                if (document.getElementById('pin').style.display != 'none') {
+                    var alszoveg = document.getElementById('displayPlace').innerText;
+                    ctx.font = '300 45px Ubuntu';
+                    ctx.fillStyle = "white";
+                    ctx.fillText(alszoveg, 350, 210);
+                    var img = new Image();
+                    img.src = "pin.png";
+                    img.onload = function() {
+                        ctx.drawImage(img, 300, 165);
+                    }
+                } else {
+                    var alszoveg = document.getElementById('displayPlace').innerText;
+                    ctx.font = '300 45px Ubuntu';
+                    ctx.fillStyle = "white";
+                    ctx.fillText(alszoveg, 300, 210);
+                }
+    
+                setTimeout(() => {
+    
+                    //Kimentesi folyamat
+                    image = canvas.toDataURL("image/png").replace("image/jpg", "image/octet-stream");
+                    var link = document.createElement('a');
+                    link.download = "HSA_hirdetes.jpg";
+                    link.href = image;
+                    link.click();
+                }, 300);
+            }
+    
+    
+    
+            //HORIZONTAL SCROLLING
+            (function() {
+                function scrollHorizontally(e) {
+                    e = window.event || e;
+                    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+                    document.getElementById('images').scrollLeft -= (delta * 50); // Multiplied by 40
+                    e.preventDefault();
+                }
+                if (document.getElementById('images').addEventListener) {
+                    // IE9, Chrome, Safari, Opera
+                    document.getElementById('images').addEventListener('mousewheel', scrollHorizontally, false);
+                    // Firefox
+                    document.getElementById('images').addEventListener('DOMMouseScroll', scrollHorizontally, false);
+                } else {
+                    // IE 6/7/8
+                    document.getElementById('images').attachEvent('onmousewheel', scrollHorizontally);
+                }
+            })();
+        </script>
+</body></html>

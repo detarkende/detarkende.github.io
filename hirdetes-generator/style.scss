@@ -1,0 +1,130 @@
+$lightgray: #ccd0d4;
+$hsagreen: #00b26b;
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    .editor {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+
+.display {
+    width: 40%;
+    min-width: 500;
+    margin-right: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 50px rgba(2, 2, 2, 0.3);
+    border: 1px solid $lightgray;
+    position: relative;
+
+    img {
+        width: 100%;
+        position: absolute;
+        border-radius: 10px;
+        border: 1px solid $lightgray;
+    }
+    p{
+        font-family: 'Ubuntu';
+        color: white;
+    }
+    .focim {
+        margin: 0;
+        padding: 0;
+        display: block;
+        font-weight: 700;
+        position: absolute;
+    }
+    .alcim {
+        margin: 0;
+        padding: 0;
+        display: block;
+        position: absolute;
+        font-weight: 300;
+    }
+
+}
+
+.controls {
+    width: 300px;
+    padding: 1rem;
+    margin-left: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 50px rgba(2, 2, 2, 0.3);
+    padding: 20px;
+    border: 1px solid $lightgray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    input {
+        border: none;
+        border-bottom: 1px solid #d2d2d2;
+        padding: 3px;
+        color: #333333;
+        font-size: 1.3rem;
+        line-height: 1.333;
+        width: 100%;
+        margin-bottom: 16px;
+        margin-top: 8px;
+    }
+    .clicker {
+        height: 1.2rem !important;
+        width: 1.2rem !important;
+        color: white;
+        border-radius: 20% !important;
+        border: 1px solid $lightgray !important;
+        margin: 0.1rem !important;
+        margin-right: 0.2rem !important;
+        padding: 0 !important;
+        background-color: white !important;
+        cursor: pointer !important;
+    }
+
+    #generate{
+        padding: 9px 35px;
+        font-family: 'Ubuntu';
+        font-weight: 700;
+        font-size: 1.3rem;
+        line-height: 1.8;
+        background-color: $hsagreen;
+        border: 2px solid $hsagreen;
+        color: white;
+        transition: 0.3s;
+        display: block;
+        margin: auto;
+    }
+
+    #generate:hover{
+        color: $hsagreen;
+        background-color: white;
+    }
+}
+
+.imgPicker {
+    background-color: #757575;
+    height: calc(785px / 3);
+}
+
+@media (max-width: 700px) {
+    .editor {
+        flex-flow: column;
+        align-items: center;
+        .display, .controls{
+            margin: 1rem;
+        }
+    }
+    .display {
+        width: 85%;
+    }
+}

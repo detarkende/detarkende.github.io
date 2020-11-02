@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <title>HSA | Hirdetés Generátor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="wrapper">
+        <div class="editor">
+            <div class="display">
+                <img id="background_img" src="./proba-kep.png">
+                <img id="overlay" src="./overlay.png">
+                <!--MEGJELENITO-->
+                <div class="szovegek">
+                    <p id="focim" class="focim"></p>
+                    <p id="alcim" class="alcim"></p>
+                </div>
+            </div>
+
+            <div class="controls">
+                <!--IRANYITOPULT-->
+
+                <input type="text" maxlength="26" id="munka" placeholder="Főcím" oninput="displayText(this)" autocomplete="off">
+                <input type="text" maxlength="30" id="hely" placeholder="Alcím" oninput="displayPlace(this)" autocomplete="off">
+                <div style="display: flex; align-content: center;">
+                    <button class="clicker" onclick="locationPin()"><i class="fas fa-check"></i> </button>
+                    <span> Az alcím helyet jelöljön!</span>
+                </div>
+                <button id="generate" onclick="generateImg()">
+                Kép letöltése!
+                </button></div>
+        
+        </div>
+
+        <div class="imgPicker">
+            <!--KEP VALASZTO-->
+            <input type="file" id="file-selector">
+                <script>
+                if (window.FileList && window.File && window.FileReader) {
+                    document.getElementById('file-selector').addEventListener('change', event => {
+                    const file = event.target.files[0];
+                    console.log(file);
+                    if (!file.type) {
+                        alert('Hiba! A kijelölt fájlformátumot nem támogatja a böngésződ.');
+                        return;
+                    }
+                    if (!file.type.match('image.*')) {
+                        alert('Hiba! A kijelölt fájl nem egy kép.');
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.addEventListener('load', event => {
+                        var img = new Image();
+                        img.src = window.URL.createObjectURL(file);
+                        img.onload = () => {
+                        console.log(img.width + '*' + img.height);
+                        if (img.width < 1500 || img.height < 785){
+                            alert('Túl alacsony felbontású kép!');
+                            return;
+                        }
+                        if ((img.width-1500) > 100 || (img.height-785) > 100){
+                            alert("A kép méretei nem megfelelőek. Keress minket emailben, vagy válassz a megadott képek közül!");
+                            return;
+                        }
+                        document.getElementById('background_img').src = event.target.result;
+                        }
+                    });
+                    reader.readAsDataURL(file);
+                    });
+                }
+                </script>
+
+        </div>
+
+    </div>
+
+    <canvas style="display: none;" width="1500" height="785" id="canvas"></canvas>
+    
+</body>
+
+
+
+<script>
+    function displaySize() {
+        var display = $('.display');
+        var height = display.width() / 1500 * 785;
+        display.css('height', height);
+        var focim = $('.focim');
+        var alcim = $('.alcim');
+        var height_ratio = height / 785;
+        focim.css('font-size', 67.5 * height_ratio + 'px');
+        alcim.css('font-size', 45 * height_ratio + 'px');
+        focim.css('line-height', 67.5 * height_ratio + 'px');
+        alcim.css('line-height', 45 * height_ratio + 'px');
+        focim.css('top', 80 * height_ratio + 'px');
+        alcim.css('top', 165 * height_ratio + 'px');
+        focim.css('left', 300 * height_ratio + 'px');
+        alcim.css('left', 300 * height_ratio + 'px');
+    }
+
+    window.onload = () => {
+        displaySize();
+    }
+    window.onresize = () => {
+        displaySize();
+    }
+
+
+
+    //locationPin
+    function locationPin(){
+        var clicker = $('.clicker');
+        var alcim = $('.alcim');
+        if (clicker.css('color') == 'rgb(255, 255, 255)'){
+            clicker.css('color', '#00b26b');
+            alcim.prepend('<i class="fas fa-map-marker-alt"></i> ');
+        }
+        else {
+            clicker.css('color', 'white');
+            alcim.html(alcim.text());
+            clicker.css('color', 'rgb(255, 255, 255)');
+        }
+    }
+
+    //displayText()
+    function displayText(input) {
+        $('.focim').html(input.value);
+    }
+
+    //displayPlace()
+    function displayPlace(input) {
+        if ($('.alcim').html().startsWith('<i class="fas fa-map-marker-alt"></i> ')){
+            $('.alcim').html('<i class="fas fa-map-marker-alt"></i> ' + input.value);
+        }
+        else {
+            $('.alcim').html(input.value);
+        }
+    }
+
+    //generateImg()
+    function generateImg(){
+        var canvas = document.getElementById('canvas');
+        var image = document.getElementById('background_img');
+        var overlay = document.getElementById('overlay');
+        var focim = document.getElementById('focim').innerHTML;
+        var alcim = document.getElementById('alcim');
+        var location = alcim.innerHTML.startsWith('<i class=\"fas fa-map-marker-alt\"></i>');
+        ctx = canvas.getContext('2d');
+            //kepek rajzolasa===========
+        ctx.drawImage(image, 0, 0);
+        ctx.drawImage(overlay, 0, 0);
+            //focim rajzolasa===========
+        ctx.font = '500 67px Ubuntu';
+        ctx.fillStyle = "white";
+        ctx.fillText(focim, 300, 147.5);
+
+            //alcim rajzolasa===========
+        ctx.font = '300 45px Ubuntu';
+        ctx.fillStyle = "white";
+        if (location){
+            alcim = alcim.innerText.trim();
+            ctx.fillText(alcim, 350, 210);
+            var img = new Image();
+            img.src = "pin.png";
+            img.onload = function() {
+                ctx.drawImage(img, 300, 165);
+            }
+        }
+        else {
+            ctx.fillText(alcim.innerText, 350, 210);
+        }
+            //Kimentesi folyamat========
+        setTimeout(() => {
+            image = canvas.toDataURL("image/png").replace("image/jpg", "image/octet-stream");
+            var link = document.createElement('a');
+            link.download = "HSA_hirdetes.jpg";
+            link.href = image;
+            link.click();
+        }, 300);
+    }
+</script>
+
+
+
+</html>

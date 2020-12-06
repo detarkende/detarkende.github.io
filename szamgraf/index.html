@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset=utf-8>
+    <title>Three.js 2. beadando</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+
+        .adataim {
+            background-color: white;
+            color: black;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: absolute;
+            top: 48px;
+            left: 0px;
+            line-height: 1rem;
+            margin: 0;
+            padding: 5px;
+        }
+
+        .funkciok {
+            background-color: white;
+            color: black;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: absolute;
+            top: 300px;
+            right: 0px;
+            line-height: 1rem;
+            margin: 0;
+            padding: 5px;
+            display: block;
+        }
+
+        p {
+            line-height: 1rem;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="adataim">
+        <p>Détár Kende</p>
+        <p>KMQ6TI</p>
+        <p>2020/21 őszi félév</p>
+    </div>
+
+    <div class="funkciok" style="display: block;">
+        <p>N billentyű: Napal/Éjjel</p>
+        <p>SPACE billentyű: szekér mozog/áll</p>
+        <p>A többi funkció a DAT.GUI-n kezelhető</p>
+        <p>A kapu felnyílik, ha áthalad a szekér.</p>
+        <p>A szekér kerekei forognak, amikor mozog</p>
+        <p>A nagy ház fala eltűntethető, bent van egy asztal.</p>
+    </div>
+
+
+
+    <script src="/js-r119/build/three.js"></script>
+    <script src="/js-r119/examples/jsm/loaders/OBJLoader.js"></script>
+    <script type="module">
+        import * as THREE from './js-r119/build/three.module.js';
+        import * as dat from './js-r119/examples/jsm/libs/dat.gui.module.js';
+        import { TrackballControls } from './js-r119/examples/jsm/controls/TrackballControls.js';
+        import { OrbitControls } from './js-r119/examples/jsm/controls/OrbitControls.js';
+        import { OBJLoader } from './js-r119/examples/jsm/loaders/OBJLoader.js';
+        import Stats from './js-r119/examples/jsm/libs/stats.module.js';
+
+        // Globális változók
+        var WIDTH, HEIGHT, aspectRatio;
+        var renderer;
+        var scene, camera;
+        var controls;
+        let object;
+        let mesh;
+        var varFal = new THREE.Mesh();
+        var kapu = new THREE.Mesh();
+        var talaj = new THREE.Mesh();
+        var allo_szekerek = new THREE.Mesh();
+        var kishazak = new THREE.Mesh();
+        var hazteto = new THREE.Mesh();
+        var hazfal = new THREE.Mesh();
+
+        var Szeker = new THREE.Group();
+        var szekerTorzs = new THREE.Mesh();
+        var elsoKerekek = new THREE.Mesh();
+        var hatsoKerekek = new THREE.Mesh();
+        var szekerIrany = 0.05;
+        var szekerMegy = true;
+
+        var tetoMaterial = new THREE.MeshLambertMaterial({ color: 0x5f1a1a });
+
+
+        var light = new THREE.DirectionalLight(0xffffff, 1, 200);
+        var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        var torchLight = new THREE.PointLight(0xffe0a6, 0, 70);
+
+        var stats;
+        var flame;
+
+
+
+
+        init();
+        // Egy képkocka rajzolása
+        //render();
+        // Animáció indítása
+        animate();
+
+
+
+        function init() {
+            // Böngésző ablakméret lekérése és méretarány számítása
+            HEIGHT = window.innerHeight;
+            WIDTH = window.innerWidth;
+            aspectRatio = WIDTH / HEIGHT;
+
+            // Renderer létrehozása és DOM-hoz adása
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.shadowMap.enabled = true;
+            renderer.setSize(WIDTH, HEIGHT);
+            renderer.setClearColor(0xb0cfff);
+            document.body.appendChild(renderer.domElement);
+
+            // Színtér létrehozása
+            scene = new THREE.Scene();
+
+            // Kamera létrehozása és vetítési paramétereinek beállítása
+            camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
+            camera.position.set(-16.1, 9.5, 7.4);
+            camera.lookAt(scene.position);
+
+            //stats
+            addStatsObject();
+
+            // Objektumok létrehozása
+
+            //=============================TEXTURAK=====================================            
+
+            var textureLoader = new THREE.TextureLoader();
+            //ko
+            var stone = textureLoader.load('./stone.jpg');
+            var stoneMaterial = new THREE.MeshLambertMaterial({ map: stone });
+            stoneMaterial.side = THREE.DoubleSide;
+            //vas
+            var iron = textureLoader.load('./iron.jpg');
+            var ironMaterial = new THREE.MeshPhongMaterial({ map: iron });
+            ironMaterial.side = THREE.DoubleSide;
+            //fold
+            var dirt = textureLoader.load('./dirt.jpg');
+            var dirtMaterial = new THREE.MeshLambertMaterial({ map: dirt });
+            dirtMaterial.side = THREE.DoubleSide;
+            //fa
+            var wood = textureLoader.load('./wood.jpg');
+            var woodenMaterial = new THREE.MeshLambertMaterial({ map: wood });
+            woodenMaterial.side = THREE.DoubleSide;
+
+            var wood2 = textureLoader.load('./wood2.jpg');
+            var woodenMaterial2 = new THREE.MeshLambertMaterial({ map: wood2 });
+            woodenMaterial2.side = THREE.DoubleSide;
+
+            tetoMaterial.side = THREE.DoubleSide;
+            //=============================/TEXTURAK=====================================            
+
+
+            //=============================OBJEKTUMOK=====================================
+            //varfalak
+            var objLoader = new OBJLoader();
+            objLoader.load('./var.obj', function (object) {
+
+                object.traverse(function (node) {
+
+                    if (node.isMesh) {
+                        node.material = stoneMaterial;
+                        node.receiveShadow = true;
+                        node.castShadow = true;
+                    }
+
+                });
+                varFal = object;
+                varFal.castShadow = true;
+                varFal.receiveShadow = true;
+                scene.add(varFal);
+            });
+
+            //vasracs
+            objLoader.load('./kapuracs.obj', function (object) {
+
+                object.traverse(function (node) {
+
+                    if (node.isMesh) {
+                        node.material = ironMaterial;
+                        node.receiveShadow = true;
+                        node.castShadow = true;
+                    }
+
+                });
+                kapu = object;
+                scene.add(kapu);
+            });
+
+            //talaj
+
+            var talajGeometry = new THREE.PlaneGeometry(50, 50);
+            talaj = new THREE.Mesh(talajGeometry, dirtMaterial);
+            talaj.rotation.x = Math.PI / 2;
+            talaj.castShadow = false;
+            talaj.receiveShadow = true;
+            scene.add(talaj);
+
+
+            //allo szekerek
+            objLoader.load('./allo_szekerek.obj', function (object) {
+
+                object.traverse(function (node) {
+
+                    if (node.isMesh) {
+                        node.material = woodenMaterial;
+                        node.receiveShadow = false;
+                        node.castShadow = true;
+                    }
+
+                });
+                allo_szekerek = object;
+                allo_szekerek.castShadow = true;
+                allo_szekerek.receiveShadow = false;
+                scene.add(allo_szekerek);
+            });
+
+            //kishazak
+            objLoader.load('./kishazak.obj', function (object) {
+
+                object.traverse(function (node) {
+
+                    if (node.isMesh) {
+                        node.material = woodenMaterial2;
+                        node.receiveShadow = false;
+                        node.castShadow = true;
+                    }
+
+                });
+                kishazak = object;
+                kishazak.castShadow = true;
+                kishazak.receiveShadow = false;
+                scene.add(kishazak);
+            });
+
+            //hazteto
+            objLoader.load('./hazteto.obj', function (object) {
+
+                object.traverse(function (node) {
+
+                    if (node.isMesh) {
+                        node.material = tetoMaterial;
+                        node.receiveShadow = false;
+                        node.castShadow = true;
+                    }
+
+                });
+                hazteto = object;
+                hazteto.castShadow = true;
+                hazteto.receiveShadow = false;
+                scene.add(hazteto);
+            });
+
+            //hazfal
+            objLoader.load('./hazfal.obj', function (object) {
+
+                object.traverse(function (node) {
+
+                    if (node.isMesh) {
+                        node.material = woodenMaterial2;
+                        node.receiveShadow = false;
+                        node.castShadow = true;
+                    }
+
+                });
+                hazfal = object;
+                hazfal.castShadow = true;
+                hazfal.receiveShadow = false;
+                scene.add(hazfal);
+            });
+
+            //mozgo szeker
+
+            objLoader.load('./szekertorzs.obj', function (object) {
+
+                object.traverse(function (node) {
+
+                    if (node.isMesh) {
+                        node.material = woodenMaterial;
+                        node.geometry.center();
+                        node.receiveShadow = true;
+                        node.castShadow = true;
+                    }
+
+                });
+                szekerTorzs = object;
+                szekerTorzs.position.y = 0.75;
+                szekerTorzs.position.x = 0.55;
+
+
+                Szeker.add(szekerTorzs);
+            });
+
+            objLoader.load('./kerekek.obj', function (object) {
+
+                object.traverse(function (node) {
+
+                    if (node.isMesh) {
+                        node.material = woodenMaterial;
+                        node.receiveShadow = true;
+                        node.castShadow = true;
+                        node.geometry.center();
+                    }
+
+                });
+                elsoKerekek = object;
+                elsoKerekek.castShadow = true;
+                elsoKerekek.receiveShadow = true;
+
+                elsoKerekek.position.y = 0.3;
+
+                Szeker.add(elsoKerekek);
+            });
+
+            objLoader.load('./kerekek.obj', function (object) {
+
+                object.traverse(function (node) {
+
+                    if (node.isMesh) {
+                        node.material = woodenMaterial;
+                        node.receiveShadow = true;
+                        node.castShadow = true;
+                        node.geometry.center();
+                    }
+
+                });
+                hatsoKerekek = object;
+                hatsoKerekek.position.y = 0.3;
+                hatsoKerekek.position.x = 1.1;
+
+                Szeker.add(hatsoKerekek);
+            });
+            console.log(Szeker);
+            Szeker.position.x = 20;
+            Szeker.position.z = 0.65;
+            Szeker.castShadow = true;
+            scene.add(Szeker);
+
+
+
+            var torch1 = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.5, 0.1), woodenMaterial);
+            flame = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.1), new THREE.MeshBasicMaterial({ color: 0xffd500 }));
+            flame.rotation.z = (Math.PI / 2);
+            flame.visible = false;
+            flame.castShadow = false;
+            flame.receiveShadow = false;
+            torchLight.add(flame);
+            torchLight.position.y += 1;
+            torch1.add(torchLight);
+            torch1.position.x = 15;
+            torch1.position.y = 4;
+            torch1.position.z = -1.4;
+            scene.add(torch1);
+
+
+
+            //=============================/OBJEKTUMOK=====================================            
+
+
+
+
+
+
+
+            //Fények beállítása
+
+
+            //var light = new THREE.DirectionalLight(0x5555ff, 0.5, 200);
+            light.position.set(0, 10, 4);
+            light.shadow.mapSize.width = 512;
+            light.shadow.mapSize.height = 512;
+            light.castShadow = true;
+            light.shadowCameraLeft = -50;
+            light.shadowCameraRight = 50;
+            light.shadowCameraTop = 50;
+            light.shadowCameraBottom = -50;
+            scene.add(light);
+            scene.add(ambientLight);
+
+
+            // Az ablak későbbi átméretezése esetén visszahívható függvény megadása
+            window.addEventListener('resize', handleWindowResize, false);
+
+            // Kamera vezérlés
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.rotateSpeed = 3.0;
+            controls.panSpeed = 1.0;
+        }
+
+        function handleWindowResize() {
+            // Az ablak átméretezése esetén a kamera vetítési paraméterek újraszámolása
+            HEIGHT = window.innerHeight;
+            WIDTH = window.innerWidth;
+            console.log('WIDTH=' + WIDTH + '; HEIGHT=' + HEIGHT);
+            renderer.setSize(WIDTH, HEIGHT);
+            aspectRatio = WIDTH / HEIGHT;
+            camera.aspect = aspectRatio;
+            camera.updateProjectionMatrix();
+            console.log(camera.position);
+
+            render();
+        }
+
+
+
+
+        //==================GUI===================================
+        const gui = new dat.GUI();
+
+        var params = {
+            szekerMegy: true,
+            color: 0x5f1a1a,
+            visible: true,
+            nappal: true,
+            lightcolor: 0xffffff,
+            ligntintensity: 1,
+            torchLight: false
+        };
+        var szeker = gui.addFolder('Szekér pozíció');
+        szeker.add(params, "szekerMegy").name("A szekér mozog").onChange(() => { szekerMegy = !szekerMegy; })
+        szeker.open();
+        var folder = gui.addFolder('Háztető és házfal');
+        folder.addColor(params, "color").name("Háztető színe").onChange(() => { tetoMaterial.color.set(params.color) });
+        folder.add(params, "visible").name("Ház fala látható").onChange(() => { hazfal.visible = (params.visible) })
+        folder.open();
+        var napszak = gui.addFolder('Napszak');
+        napszak.add(params, "nappal").name("Nappal").onChange(() => {
+            if (params.nappal == true) {
+                light.intensity = 1;
+                light.color.set(0xffffff);
+                renderer.setClearColor(0xb0cfff);
+                ambientLight.intensity = 0.5;
+            }
+            else {
+                light.intensity = 0.5;
+                light.color.set(0xb7c6ff);
+                renderer.setClearColor(0x000000);
+                ambientLight.intensity = 0;
+            }
+        });
+        napszak.addColor(params, "lightcolor").name("Fény színe").onChange(() => { light.color.set(params.lightcolor) });
+        napszak.add(params, "ligntintensity", 0, 2).name("Fény erőssége").onChange(() => { light.intensity = params.ligntintensity; });
+        napszak.add(params, "torchLight").name("Fáklya").onChange(() => {
+            if (torchLight.intensity == 0) {
+                torchLight.intensity = 1.5;
+                flame.visible = true;
+            }
+            else {
+                torchLight.intensity = 0;
+                torchLight.castShadow = false;
+                flame.visible = false;
+            }
+        });
+        napszak.open();
+
+        //==================/GUI===================================
+
+        window.onkeydown = (event) => {
+            if (event.key == " ") {
+                //szekerMegy = !szekerMegy;
+                document.querySelectorAll('input[type="checkbox"]')[0].click();
+            }
+            else if (event.key == "N" || event.key == "n") {
+                document.querySelectorAll('input[type="checkbox"]')[2].click();
+            }
+            else if (event.key == "I" || event.key == "i") {
+                if (document.querySelector('.funkciok').style.display == "block") {
+                    document.querySelector('.funkciok').style.display = "none";
+                }
+                else {
+                    document.querySelector('.funkciok').style.display = "block";
+
+                }
+            }
+        }
+
+        function addStatsObject() {
+            stats = new Stats();
+            stats.setMode(0);
+
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+            document.body.appendChild(stats.domElement);
+        }
+
+        function animate() {
+            // Újabb képkocka rajzolásának kérése.
+            // Maximálisan 60 FPS-t biztosít a rendszer.
+            requestAnimationFrame(animate);
+            // Kameramozgás vezérlése
+            controls.update();
+            stats.update();
+
+            flame.rotateY(0.1);
+            flame.rotateX(0.1);
+
+
+            if (szekerMegy) {
+                Szeker.position.x -= szekerIrany;
+                elsoKerekek.rotation.z += 2 * szekerIrany;
+                hatsoKerekek.rotation.z += 2 * szekerIrany;
+            }
+
+            if (Szeker.position.x <= 5 || Szeker.position.x >= 20) {
+                szekerIrany = szekerIrany * -1;
+            }
+
+
+            kapu.position.y = Math.abs(Math.sin(0.2 * Szeker.position.x + 2.2)) * 1.5;
+            // Új képkocka rajzolása
+            render();
+            //console.log(camera.position)
+        }
+
+
+
+        function render() {
+            // 3D -> 2D vetített kép kiszámítása.
+            // scene 3D színtér képe a camera kamera szemszögéből.
+            renderer.render(scene, camera);
+        }
+
+
+    </script>
+</body>
+
+</html>

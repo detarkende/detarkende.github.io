@@ -124,6 +124,7 @@ body {
   transition: 0.3s;
   display: block;
   margin: auto;
+  cursor: pointer;
 }
 
 .controls #generate:hover {

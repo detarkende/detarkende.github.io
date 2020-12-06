@@ -7,9 +7,170 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
     <title>HSA | Hirdetés Generátor</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 </head>
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <style>
+/*
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+*/
+
+.wrapper {
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.wrapper .editor {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.display {
+  width: 40%;
+  min-width: 500;
+  margin-right: 2rem;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 1px 50px rgba(2, 2, 2, 0.3);
+          box-shadow: 0 1px 50px rgba(2, 2, 2, 0.3);
+  border: 1px solid #ccd0d4;
+  position: relative;
+}
+
+.display img {
+  width: 100%;
+  position: absolute;
+  border-radius: 10px;
+  border: 1px solid #ccd0d4;
+}
+
+.display p {
+  font-family: 'Ubuntu';
+  color: white;
+}
+
+.display .focim {
+  margin: 0;
+  padding: 0;
+  display: block;
+  font-weight: 700;
+  position: absolute;
+}
+
+.display .alcim {
+  margin: 0;
+  padding: 0;
+  display: block;
+  position: absolute;
+  font-weight: 300;
+}
+
+.controls {
+  width: 300px;
+  padding: 1rem;
+  margin-left: 2rem;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 1px 50px rgba(2, 2, 2, 0.3);
+          box-shadow: 0 1px 50px rgba(2, 2, 2, 0.3);
+  padding: 20px;
+  border: 1px solid #ccd0d4;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.controls input {
+  border: none;
+  border-bottom: 1px solid #d2d2d2;
+  padding: 3px;
+  color: #333333;
+  font-size: 1.3rem;
+  line-height: 1.333;
+  width: 100%;
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+
+.controls .clicker {
+  height: 1.2rem !important;
+  width: 1.2rem !important;
+  color: white;
+  border-radius: 20% !important;
+  border: 1px solid #ccd0d4 !important;
+  margin: 0.1rem !important;
+  margin-right: 0.2rem !important;
+  padding: 0 !important;
+  background-color: white !important;
+  cursor: pointer !important;
+}
+
+.controls #generate {
+  padding: 9px 35px;
+  font-family: 'Ubuntu';
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 1.8;
+  background-color: #00b26b;
+  border: 2px solid #00b26b;
+  color: white;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  display: block;
+  margin: auto;
+  cursor: pointer;
+}
+
+.controls #generate:hover {
+  color: #00b26b;
+  background-color: white;
+}
+
+.imgPicker {
+  background-color: #757575;
+  height: calc(785px / 3);
+}
+
+@media (max-width: 700px) {
+  .editor {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: column;
+            flex-flow: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .editor .display, .editor .controls {
+    margin: 1rem;
+  }
+  .display {
+    width: 85%;
+  }
+}
+/*# sourceMappingURL=style.css.map */
+    </style>
 
     <div class="wrapper">
         <div class="editor">
@@ -77,114 +238,115 @@
                 </script>
 
         </div>
+        <script>
+            function displaySize() {
+                var display = $('.display');
+                var height = display.width() / 1500 * 785;
+                display.css('height', height);
+                var focim = $('.focim');
+                var alcim = $('.alcim');
+                var height_ratio = height / 785;
+                focim.css('font-size', 67.5 * height_ratio + 'px');
+                alcim.css('font-size', 45 * height_ratio + 'px');
+                focim.css('line-height', 67.5 * height_ratio + 'px');
+                alcim.css('line-height', 45 * height_ratio + 'px');
+                focim.css('top', 80 * height_ratio + 'px');
+                alcim.css('top', 165 * height_ratio + 'px');
+                focim.css('left', 300 * height_ratio + 'px');
+                alcim.css('left', 300 * height_ratio + 'px');
+            }
+        
+            window.onload = () => {
+                displaySize();
+            }
+            window.onresize = () => {
+                displaySize();
+            }
+        
+        
+        
+            //locationPin
+            function locationPin(){
+                var clicker = $('.clicker');
+                var alcim = $('.alcim');
+                if (clicker.css('color') == 'rgb(255, 255, 255)'){
+                    clicker.css('color', '#00b26b');
+                    alcim.prepend('<i class="fas fa-map-marker-alt"></i> ');
+                }
+                else {
+                    clicker.css('color', 'white');
+                    alcim.html(alcim.text());
+                    clicker.css('color', 'rgb(255, 255, 255)');
+                }
+            }
+        
+            //displayText()
+            function displayText(input) {
+                $('.focim').html(input.value);
+            }
+        
+            //displayPlace()
+            function displayPlace(input) {
+                if ($('.alcim').html().startsWith('<i class="fas fa-map-marker-alt"></i> ')){
+                    $('.alcim').html('<i class="fas fa-map-marker-alt"></i> ' + input.value);
+                }
+                else {
+                    $('.alcim').html(input.value);
+                }
+            }
+        
+            //generateImg()
+            function generateImg(){
+                var canvas = document.getElementById('canvas');
+                var image = document.getElementById('background_img');
+                var overlay = document.getElementById('overlay');
+                var focim = document.getElementById('focim').innerHTML;
+                var alcim = document.getElementById('alcim');
+                var location = alcim.innerHTML.startsWith('<i class=\"fas fa-map-marker-alt\"></i>');
+                ctx = canvas.getContext('2d');
+                    //kepek rajzolasa===========
+                ctx.drawImage(image, 0, 0);
+                ctx.drawImage(overlay, 0, 0);
+                    //focim rajzolasa===========
+                ctx.font = '500 67px Ubuntu';
+                ctx.fillStyle = "white";
+                ctx.fillText(focim, 300, 147.5);
+        
+                    //alcim rajzolasa===========
+                ctx.font = '300 45px Ubuntu';
+                ctx.fillStyle = "white";
+                if (location){
+                    alcim = alcim.innerText.trim();
+                    ctx.fillText(alcim, 350, 210);
+                    var img = new Image();
+                    img.src = "pin.png";
+                    img.onload = function() {
+                        ctx.drawImage(img, 300, 165);
+                    }
+                }
+                else {
+                    ctx.fillText(alcim.innerText, 350, 210);
+                }
+                    //Kimentesi folyamat========
+                setTimeout(() => {
+                    image = canvas.toDataURL("image/png").replace("image/jpg", "image/octet-stream");
+                    var link = document.createElement('a');
+                    link.download = "HSA_hirdetes.jpg";
+                    link.href = image;
+                    link.click();
+                }, 300);
+            }
+        </script>
+
+        <canvas style="display: none;" width="1500" height="785" id="canvas"></canvas>
 
     </div>
 
-    <canvas style="display: none;" width="1500" height="785" id="canvas"></canvas>
     
+
 </body>
 
 
-
-<script>
-    function displaySize() {
-        var display = $('.display');
-        var height = display.width() / 1500 * 785;
-        display.css('height', height);
-        var focim = $('.focim');
-        var alcim = $('.alcim');
-        var height_ratio = height / 785;
-        focim.css('font-size', 67.5 * height_ratio + 'px');
-        alcim.css('font-size', 45 * height_ratio + 'px');
-        focim.css('line-height', 67.5 * height_ratio + 'px');
-        alcim.css('line-height', 45 * height_ratio + 'px');
-        focim.css('top', 80 * height_ratio + 'px');
-        alcim.css('top', 165 * height_ratio + 'px');
-        focim.css('left', 300 * height_ratio + 'px');
-        alcim.css('left', 300 * height_ratio + 'px');
-    }
-
-    window.onload = () => {
-        displaySize();
-    }
-    window.onresize = () => {
-        displaySize();
-    }
-
-
-
-    //locationPin
-    function locationPin(){
-        var clicker = $('.clicker');
-        var alcim = $('.alcim');
-        if (clicker.css('color') == 'rgb(255, 255, 255)'){
-            clicker.css('color', '#00b26b');
-            alcim.prepend('<i class="fas fa-map-marker-alt"></i> ');
-        }
-        else {
-            clicker.css('color', 'white');
-            alcim.html(alcim.text());
-            clicker.css('color', 'rgb(255, 255, 255)');
-        }
-    }
-
-    //displayText()
-    function displayText(input) {
-        $('.focim').html(input.value);
-    }
-
-    //displayPlace()
-    function displayPlace(input) {
-        if ($('.alcim').html().startsWith('<i class="fas fa-map-marker-alt"></i> ')){
-            $('.alcim').html('<i class="fas fa-map-marker-alt"></i> ' + input.value);
-        }
-        else {
-            $('.alcim').html(input.value);
-        }
-    }
-
-    //generateImg()
-    function generateImg(){
-        var canvas = document.getElementById('canvas');
-        var image = document.getElementById('background_img');
-        var overlay = document.getElementById('overlay');
-        var focim = document.getElementById('focim').innerHTML;
-        var alcim = document.getElementById('alcim');
-        var location = alcim.innerHTML.startsWith('<i class=\"fas fa-map-marker-alt\"></i>');
-        ctx = canvas.getContext('2d');
-            //kepek rajzolasa===========
-        ctx.drawImage(image, 0, 0);
-        ctx.drawImage(overlay, 0, 0);
-            //focim rajzolasa===========
-        ctx.font = '500 67px Ubuntu';
-        ctx.fillStyle = "white";
-        ctx.fillText(focim, 300, 147.5);
-
-            //alcim rajzolasa===========
-        ctx.font = '300 45px Ubuntu';
-        ctx.fillStyle = "white";
-        if (location){
-            alcim = alcim.innerText.trim();
-            ctx.fillText(alcim, 350, 210);
-            var img = new Image();
-            img.src = "pin.png";
-            img.onload = function() {
-                ctx.drawImage(img, 300, 165);
-            }
-        }
-        else {
-            ctx.fillText(alcim.innerText, 350, 210);
-        }
-            //Kimentesi folyamat========
-        setTimeout(() => {
-            image = canvas.toDataURL("image/png").replace("image/jpg", "image/octet-stream");
-            var link = document.createElement('a');
-            link.download = "HSA_hirdetes.jpg";
-            link.href = image;
-            link.click();
-        }, 300);
-    }
-</script>
 
 
 
